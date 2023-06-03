@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -18,10 +19,15 @@ import java.time.Duration;
 import java.util.Set;
 
 public class FullscreenTests {
-    Logger logger = LogManager.getLogger(FullscreenTests.class);
+    private Logger logger = LogManager.getLogger(FullscreenTests.class);
     private WebDriver driver;
     private final String LOGIN = "wirato4727@ippals.com";
     private final String PASSWORD = "Qwerty123!";
+
+    @BeforeAll
+    public static void beforeAll(){
+        WebDriverManager.chromedriver().setup();
+    }
 
     @BeforeEach
     public void before() {
@@ -49,7 +55,7 @@ public class FullscreenTests {
                 .sendKeys(LOGIN);
         driver.findElement(By.xpath("//input[@type='password'][@placeholder='Введите пароль']"))
                 .sendKeys(PASSWORD);
-        driver.findElement(By.cssSelector("div.new-input-line_last:nth-child(5) > button:nth-child(1)"));
+        driver.findElement(By.xpath("//div[@class='new-log-reg__body']/descendant::button[contains(text(), 'Войти')]")).click();
         Set<Cookie> cookie = driver.manage().getCookies();
         for (Cookie cookies : cookie) {
             logger.info("Name = " + cookies.getName() + ", " + "Value = " + cookies.getValue());
